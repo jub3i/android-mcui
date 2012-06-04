@@ -1,0 +1,13 @@
+A draft UI for MC.
+
+Has a floating ListView with a custom ListAdapter layout.
+
+TODO:
+1) Three options for for the 'tabs' at the bottom: Iphone style tabs,
+						   Usual android tabs,
+						   Possibly use a ViewFlipper.
+2) Add in grey gradient dividers for the PullToRefresh ListView. 
+
+
+
+
