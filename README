@@ -1,12 +1,9 @@
-A draft UI for MC.
+Second Iteration of UI elements for MC.
 
-Has a floating ListView with a custom ListAdapter layout.
+Has a floating ListView, custom ListAdapter layout and an extended View beer glass animation.
 
 TODO:
-1) Three options for for the 'tabs' at the bottom: Iphone style tabs,
-						   Usual android tabs,
-						   Possibly use a ViewFlipper.
-2) Add in grey gradient dividers for the PullToRefresh ListView. 
+1) Make a header for the ListAdaptor.
 
 
 
