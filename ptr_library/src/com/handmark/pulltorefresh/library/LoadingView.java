@@ -21,8 +21,9 @@ public class LoadingView extends View {
     private final int Y_START_POS = -44;
     private final int Y_END_POS = 14;
     
-    //since the PTR-library uses 4 instances of LoadingLayout, we need to sync the positions
-    //of the animations to make movements up and down appear smooth.
+    //since the pulltorefresh_library uses 4 instances of LoadingLayout, 
+    //we need to sync the positions of the animations to make movements 
+    //up and down appear smooth.
     static int currentX = -48;
     static int currentY = -44;
     
