@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout 
  	xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rl"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:background="@drawable/woodback" >
@@ -16,7 +17,7 @@
 	    android:paddingBottom="15dip"
 		android:background="#ffccff"
 		android:textColor="#000000"
-		android:textSize="30sp"
+		android:textSize="30dip"
 		android:textStyle="bold" />
 	
  	<TextView
@@ -25,7 +26,7 @@
 	    android:layout_height="wrap_content"
 	    android:layout_alignParentBottom="true"
 	    android:layout_alignParentLeft="true"
-	    android:text="TabsBar"
+	    android:text="@string/bottomBar"
 	    android:paddingLeft="20dip"
 	    android:paddingBottom="15dip"
 		android:background="#ffccff"
@@ -50,6 +51,7 @@
 	        android:background="@android:color/transparent"
 			android:cacheColorHint="@android:color/transparent"
 			android:divider="@android:color/transparent"
+			android:listSelector="@android:color/transparent"
     		android:dividerHeight="8dp" />
 		
 	</LinearLayout>

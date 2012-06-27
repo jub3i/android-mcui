@@ -3,5 +3,7 @@
 
     <string name="topBar">TopBar</string>
     <string name="app_name">MCUI</string>
+    <string name="bottomBar">bottomBar</string>
+    <string name="header">ListHeader</string>
 
 </resources>

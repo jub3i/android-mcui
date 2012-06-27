@@ -1,22 +1,26 @@
 package dev.atga.android.mcui;
 
+
 import java.util.Arrays;
 import java.util.LinkedList;
-
 import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.format.DateUtils;
-import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
 import android.widget.ListView;
-
+import android.widget.TextView;
+import android.widget.Toast;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
 public class MCUIActivity extends Activity {
-	//instantiate data members	
-	private String[] items={"lorem", "ipsum", "dolor",
+	//instantiate data members.
+	private String[] mItems={"lorem", "ipsum", "dolor",
 		"consectetuer", "adipiscing", "elit", "morbi", "vel",
 		"ligula", "vitae", "arcu", "aliquet", "mollis",
 		"etiam", "vel", "erat", "placerat", "ante",
@@ -26,36 +30,55 @@ public class MCUIActivity extends Activity {
 	private PullToRefreshListView mPullRefreshListView;
 	private LinkedList<String> mListItems;
 	
-			
-    @Override
+	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d("ATGA", " Start oncreate");
         setContentView(R.layout.main);
         
-        //configure PullToRefreshListView data items in linked list
+        //configure PullToRefreshListView data items in linked list.
         mListItems = new LinkedList<String>();
-		mListItems.addAll(Arrays.asList(items));
+		mListItems.addAll(Arrays.asList(mItems));
 		
-		//add custom list_item cells to ArrayAdapter
+		//add custom list_item cells to ArrayAdapter.
         mAdapter = new ArrayAdapter<String>(this, R.layout.list_item, R.id.label, mListItems);
         
-        //configure PullToRefreshListView properties
+        //configure PullToRefreshListView properties.
         mPullRefreshListView = (PullToRefreshListView) findViewById(R.id.vLst);
         mPullRefreshListView.setDisableScrollingWhileRefreshing(true);
         mPullRefreshListView.setOnRefreshListener(new OnRefreshListener() {
-		@Override
-		public void onRefresh() {
-			mPullRefreshListView.setLastUpdatedLabel(DateUtils.formatDateTime(getApplicationContext(),
-					System.currentTimeMillis(), DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE
-						| DateUtils.FORMAT_ABBREV_ALL));
-				//Do work to refresh the list here
+        	@Override
+        	public void onRefresh() {
+				mPullRefreshListView.setLastUpdatedLabel(DateUtils.formatDateTime(getApplicationContext(),
+						System.currentTimeMillis(), DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE
+							| DateUtils.FORMAT_ABBREV_ALL));
+				//Do work to refresh the list here.
 				new GetDataTask().execute();
 			}
 		});
-
-        //bind adapter and PullToRefreshListview
+        
+        //bind adapter and PullToRefreshListview.
         ListView actualListView = mPullRefreshListView.getRefreshableView();
+        
+        //Setup clickListener to display Toasts when items in ListView are clicked.
+        actualListView.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position,
+                    long id) {
+            	if (position == 1) {
+            		Toast.makeText(getBaseContext(), "header", Toast.LENGTH_LONG).show();
+            	}
+            	else {
+            		String item = ((TextView)((LinearLayout)view).getChildAt(3)).getText().toString();
+                    Toast.makeText(getBaseContext(), item, Toast.LENGTH_LONG).show();
+            	}
+            }
+        });
+            
+        //inflate header from xml and add to top of ListView.
+        LinearLayout mHead = (LinearLayout) getLayoutInflater().inflate(R.layout.header, null); 
+        actualListView.addHeaderView(mHead);
+        
+        //bind ArrayAdapter to ListView.
         actualListView.setAdapter(mAdapter);
     }
     
@@ -67,7 +90,7 @@ public class MCUIActivity extends Activity {
 				Thread.sleep(5000);
 			} catch (InterruptedException e) {
 			}
-			return items;
+			return mItems;
 		}
 
 		@Override

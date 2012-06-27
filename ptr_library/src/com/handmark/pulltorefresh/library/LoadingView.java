@@ -11,24 +11,27 @@ import android.util.AttributeSet;
 import android.view.View;
 
 public class LoadingView extends View {
-	
 	//enum for the various animations the LoadingView can do.
 	public enum AnimMode {
         A_UP , A_DOWN, A_DOWN_UP, A_DRAW_FULL
     }
+	
 	//x,y coordinates for the animations start and end position.
 	private final int X_START_POS = -48;
     private final int Y_START_POS = -44;
     private final int Y_END_POS = 14;
+    
     //since the PTR-library uses 4 instances of LoadingLayout, we need to sync the positions
     //of the animations to make movements up and down appear smooth.
     static int currentX = -48;
     static int currentY = -44;
+    
     //enum for which mode of animation the LoadingView is in.
     private AnimMode mode;
     //boolean controlling the cycling between up and down animations.
 	private boolean isAnimUp;
-    //Instantiate static resources used in the animation.
+    
+	//Instantiate static resources used in the animation.
     Bitmap mainImage = BitmapFactory.decodeResource(getResources(),R.drawable.background);
     Bitmap mask = BitmapFactory.decodeResource(getResources(), R.drawable.backmask);
     Bitmap foreground = BitmapFactory.decodeResource(getResources(), R.drawable.foreground);
@@ -82,7 +85,7 @@ public class LoadingView extends View {
 	}
 	
 	//helper function for the onDraw() method.
-	//draws the static resources to the canvas used to draw the LoadingView.
+	//draws the static resources onto the canvas used to draw the LoadingView.
 	private void drawHelper(int x, int y, Canvas c) {
 		c.drawBitmap(mask, 0, 0, paint);
         paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
