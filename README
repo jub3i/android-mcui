@@ -1,6 +1,6 @@
 Second Iteration of UI elements for MC.
 
-Has a floating ListView, custom ListAdapter layout and an extended View beer glass animation.
+Has a floating PullToRefreshListView, custom ListAdapter layout and an extended View beer glass animation.
 
 
 
