@@ -1,4 +1,6 @@
-package com.handmark.pulltorefresh.library;
+package com.handmark.pulltorefresh.library.internal;
+
+import com.handmark.pulltorefresh.library.R;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -17,9 +19,15 @@ public class LoadingView extends View {
     }
 	
 	//x,y coordinates for the animations start and end position.
-	private final int X_START_POS = -48;
-    private final int Y_START_POS = -44;
-    private final int Y_END_POS = 14;
+	//x,y directions indicated in diagram, ie. y-axis is inverted.
+    //             (-y)
+	//  	        |
+	//  	(-x) ---+--- (+x)
+	//  	  	    |
+	//		 	   (+y)
+	private final int X_START_POS = -48; //start as far to the left as possible.
+    private final int Y_START_POS = -44; 
+    private final int Y_END_POS = 14; //how far down the beer level drops.
     
     //since the pulltorefresh_library uses 4 instances of LoadingLayout, 
     //we need to sync the positions of the animations to make movements 
@@ -62,16 +70,19 @@ public class LoadingView extends View {
 	}
 	
 	//public function to call the animating of the LoadingView.
+	//animates the beer level dropping.
 	public void animDown() {
 		mode = AnimMode.A_DOWN;
 		invalidate();
 	}
 	//public function to call the animating of the LoadingView.
+	//animates the beer level rising.
 	public void animUp() {
 		mode = AnimMode.A_UP;
 		invalidate();
 	}
 	//public function to call the animating of the LoadingView.
+	//animates the beer level cycling between falling first then rising.
 	public void animDownUp() {
 		mode = AnimMode.A_DOWN_UP;
 		invalidate();
@@ -93,15 +104,7 @@ public class LoadingView extends View {
         c.drawBitmap(mainImage, x, y, paint);
         paint.setXfermode(null);
         c.drawBitmap(foreground, 0, 0, paint);
-		
 	}
-	
-	//Sets the size of the view to a static 56x75 pixels.
-	@Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-		setMeasuredDimension(56, 75);
-    }
 	
 	@Override
     protected void onDraw(Canvas canvas) {
@@ -122,6 +125,7 @@ public class LoadingView extends View {
         		}
         		drawHelper(currentX, currentY, c);
 	            canvas.drawBitmap(result, -64, -56, null);
+        		
 	            if (currentY <= Y_END_POS)
 	            	invalidate();
 	            break;
@@ -133,6 +137,7 @@ public class LoadingView extends View {
         		}
         		drawHelper(currentX, currentY, c);
         		canvas.drawBitmap(result, -64, -56, null);
+        		
 	            if (currentY >= Y_START_POS) 
 	               	invalidate();                	
 	            break;
@@ -143,13 +148,15 @@ public class LoadingView extends View {
         			if (currentY <= Y_END_POS) {
             			currentX += 2;
     	            	currentY++;
-            		}
+        			}
         			drawHelper(currentX, currentY, c);
     	            canvas.drawBitmap(result, -64, -56, null);
+        			
     	            if (currentY <= Y_END_POS)
     	            	invalidate();
     	            else {
-    	            	isAnimUp = false;
+    	            	//when beer level dropped to Y_END_POS, toggle beer level rising boolean.
+    	            	isAnimUp = false; 
     	            	invalidate();
     	            }
     	        }
@@ -158,17 +165,26 @@ public class LoadingView extends View {
         			if (currentY >= Y_START_POS) {
             			currentX -= 2;
             			currentY--;
-            		}
+        			}
         			drawHelper(currentX, currentY, c);
             		canvas.drawBitmap(result, -64, -56, null);
+        			
     	            if (currentY >= Y_START_POS) 
     	               	invalidate();
     	            else {
+    	            	//and repeat.
     	            	isAnimUp = true;
     	            	invalidate();
     	            }
     	        }
         		break;
         }
+    }
+	
+	//Sets the size of the view to a static 56x75 pixels.
+	@Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+		setMeasuredDimension(56, 75);
     }
 }

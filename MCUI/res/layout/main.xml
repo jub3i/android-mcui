@@ -44,7 +44,7 @@
 	    android:paddingLeft="30dip"
 	    android:paddingRight="30dip" > -->
 	    
-		<com.handmark.pulltorefresh.library.PullToRefreshListView
+		<com.handmark.pulltorefresh.library.PullToRefreshListView 
 	        android:id="@+id/vLst"
 	        android:layout_height="fill_parent"
 	        android:layout_width="fill_parent" 

@@ -64,11 +64,13 @@ public class MCUIActivity extends Activity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position,
                     long id) {
+            	String item;
             	if (position == 1) {
-            		Toast.makeText(getBaseContext(), "header", Toast.LENGTH_LONG).show();
+            		item = ((TextView)((LinearLayout)view).getChildAt(1)).getText().toString();
+            		Toast.makeText(getBaseContext(), item, Toast.LENGTH_LONG).show();
             	}
             	else {
-            		String item = ((TextView)((LinearLayout)view).getChildAt(3)).getText().toString();
+            		item = ((TextView)((LinearLayout)view).getChildAt(3)).getText().toString();
                     Toast.makeText(getBaseContext(), item, Toast.LENGTH_LONG).show();
             	}
             }

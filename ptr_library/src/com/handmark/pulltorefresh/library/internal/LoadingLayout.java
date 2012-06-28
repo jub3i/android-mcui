@@ -27,8 +27,8 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
-import com.handmark.pulltorefresh.library.LoadingView;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
+import com.handmark.pulltorefresh.library.internal.LoadingView;
 import com.handmark.pulltorefresh.library.R;
 
 public class LoadingLayout extends FrameLayout {
