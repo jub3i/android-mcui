@@ -1,50 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:paddingBottom="10dip"
-    android:paddingTop="10dp"
+    android:paddingTop="5dip"
+    android:paddingBottom="3dip"
     android:theme="@android:style/Theme.Translucent"
     android:background="#60000000" >
-    <!--android:background="#ffffff" 
-    android:theme="@android:style/Theme.Translucent"
-    android:background="#60000000" -->
     
-    <LinearLayout
-        android:id="@+id/ll"
-        android:layout_width="wrap_content"
+    <RelativeLayout
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:gravity="center"
-        android:orientation="vertical" >
+        android:layout_width="0dip"
+        android:layout_weight="30" >
+	    
+	    <com.handmark.pulltorefresh.library.internal.LoadingView
+	        android:id="@+id/lv"
+	        android:layout_height="wrap_content"
+	        android:layout_width="wrap_content"
+	        android:layout_alignParentRight="true"
+	        android:layout_centerVertical="true" />
+	</RelativeLayout>
+    
+    <RelativeLayout
+        android:id="@+id/ll"
+        android:layout_height="wrap_content"
+        android:layout_width="0dip"
+        android:layout_weight="70" >
 
         <TextView
             android:id="@+id/pull_to_refresh_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
+            android:paddingTop="5dip"            
+            android:paddingLeft="10dip"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="#000000"
             android:textStyle="bold"
-            android:text="Pull To Refresh" />
+            android:text="@string/pull_to_refresh_pull_label" />
         <TextView
             android:id="@+id/pull_to_refresh_sub_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
+            android:layout_below="@id/pull_to_refresh_text"
+            android:paddingLeft="15dip"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textColor="#bebebe"
             android:visibility="gone" />
-    </LinearLayout>
+    </RelativeLayout>
     
-    <com.handmark.pulltorefresh.library.internal.LoadingView
-        android:id="@+id/lv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" 
-        android:layout_centerVertical="true"
-        android:layout_marginLeft="30dip"
-        android:layout_marginRight="20dip" />             
-        <!--  android:background="@android:color/transparent"
-          	android:paddingLeft="10dip" /> -->
-    
-</RelativeLayout>
+</LinearLayout>
