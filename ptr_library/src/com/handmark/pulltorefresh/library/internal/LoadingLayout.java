@@ -28,40 +28,52 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
-import com.handmark.pulltorefresh.library.internal.LoadingView;
 import com.handmark.pulltorefresh.library.R;
 
 public class LoadingLayout extends FrameLayout {
-	//instantiate custom data members 
-	private LoadingView mLoadView;
+
+	static final int DEFAULT_ROTATION_ANIMATION_DURATION = 600;
+
+	private final LoadingView mHeaderImage;
 	
-	//instantiate view/label members
 	private final TextView mHeaderText;
 	private final TextView mSubHeaderText;
+
 	private String mPullLabel;
 	private String mRefreshingLabel;
 	private String mReleaseLabel;
-	
+
 	public LoadingLayout(Context context, final Mode mode, TypedArray attrs) {
 		super(context);
-		
-		//attach views from xml.
 		ViewGroup header = (ViewGroup) LayoutInflater.from(context).inflate(R.layout.pull_to_refresh_header, this);
 		mHeaderText = (TextView) header.findViewById(R.id.pull_to_refresh_text);
 		mSubHeaderText = (TextView) header.findViewById(R.id.pull_to_refresh_sub_text);
-		mLoadView = (LoadingView) findViewById(R.id.lv);
+		mHeaderImage = (LoadingView) header.findViewById(R.id.pull_to_refresh_image);
+
+		//mHeaderImage.setScaleType(ScaleType.MATRIX);
+		//mHeaderImageMatrix = new Matrix();
+		//mHeaderImage.setImageMatrix(mHeaderImageMatrix);
 		
+		/*
+		final Interpolator interpolator = new LinearInterpolator();
+		mRotateAnimation = new RotateAnimation(0, 360, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF,
+				0.5f);
+		mRotateAnimation.setInterpolator(interpolator);
+		mRotateAnimation.setDuration(DEFAULT_ROTATION_ANIMATION_DURATION);
+		mRotateAnimation.setRepeatCount(Animation.INFINITE);
+		mRotateAnimation.setRepeatMode(Animation.RESTART);
+		*/
 		switch (mode) {
 			case PULL_UP_TO_REFRESH:
-				//Load in labels
+				// Load in labels
 				mPullLabel = context.getString(R.string.pull_to_refresh_from_bottom_pull_label);
 				mRefreshingLabel = context.getString(R.string.pull_to_refresh_from_bottom_refreshing_label);
 				mReleaseLabel = context.getString(R.string.pull_to_refresh_from_bottom_release_label);
 				break;
-				
+
 			case PULL_DOWN_TO_REFRESH:
 			default:
-				//Load in labels
+				// Load in labels
 				mPullLabel = context.getString(R.string.pull_to_refresh_pull_label);
 				mRefreshingLabel = context.getString(R.string.pull_to_refresh_refreshing_label);
 				mReleaseLabel = context.getString(R.string.pull_to_refresh_release_label);
@@ -83,13 +95,27 @@ public class LoadingLayout extends FrameLayout {
 			}
 		}
 
+		// Try and get defined drawable from Attrs
+		Drawable imageDrawable = null;
+		if (attrs.hasValue(R.styleable.PullToRefresh_ptrDrawable)) {
+			imageDrawable = attrs.getDrawable(R.styleable.PullToRefresh_ptrDrawable);
+		}
+
+		// If we don't have a user defined drawable, load the default
+		if (null == imageDrawable) {
+			imageDrawable = context.getResources().getDrawable(R.drawable.default_ptr_drawable);
+		}
+
+		// Set Drawable, and save width/height
+		//setLoadingDrawable(imageDrawable);
+
 		reset();
 	}
 
 	public void reset() {
 		mHeaderText.setText(Html.fromHtml(mPullLabel));
-		//draw mug full.
-		mLoadView.animDrawFull();
+		mHeaderImage.setVisibility(View.VISIBLE);
+		mHeaderImage.animDrawFull();
 		
 		if (TextUtils.isEmpty(mSubHeaderText.getText())) {
 			mSubHeaderText.setVisibility(View.GONE);
@@ -100,33 +126,31 @@ public class LoadingLayout extends FrameLayout {
 
 	public void releaseToRefresh() {
 		mHeaderText.setText(Html.fromHtml(mReleaseLabel));
-		//start animation to bubble down.
-		mLoadView.animDown();
-	}
-
-	public void refreshing() {
-		mHeaderText.setText(Html.fromHtml(mRefreshingLabel));
-		mSubHeaderText.setVisibility(View.GONE);
-		//start animation to cycle bubbling up and down
-		mLoadView.animDownUp();
-	}
-	
-	public void pullToRefresh() {
-		mHeaderText.setText(Html.fromHtml(mPullLabel));
-		//start animation to bubble back up
-		mLoadView.animUp();
+		mHeaderImage.animDown();
 	}
 
 	public void setPullLabel(String pullLabel) {
 		mPullLabel = pullLabel;
 	}
-	
+
+	public void refreshing() {
+		mHeaderText.setText(Html.fromHtml(mRefreshingLabel));
+		mHeaderImage.animDownUp();
+		mSubHeaderText.setVisibility(View.GONE);
+	}
+
 	public void setRefreshingLabel(String refreshingLabel) {
 		mRefreshingLabel = refreshingLabel;
 	}
 
 	public void setReleaseLabel(String releaseLabel) {
 		mReleaseLabel = releaseLabel;
+	}
+
+	public void pullToRefresh() {
+		mHeaderText.setText(Html.fromHtml(mPullLabel));
+		mHeaderImage.animUp();
+		
 	}
 
 	public void setTextColor(ColorStateList color) {
@@ -142,6 +166,13 @@ public class LoadingLayout extends FrameLayout {
 		setTextColor(ColorStateList.valueOf(color));
 	}
 
+	/*public void setLoadingDrawable(Drawable imageDrawable) {
+		// Set Drawable, and save width/height
+		mHeaderImage.setImageDrawable(imageDrawable);
+		mRotationPivotX = imageDrawable.getIntrinsicWidth() / 2f;
+		mRotationPivotY = imageDrawable.getIntrinsicHeight() / 2f;
+	}*/
+
 	public void setSubTextColor(int color) {
 		setSubTextColor(ColorStateList.valueOf(color));
 	}
@@ -154,4 +185,13 @@ public class LoadingLayout extends FrameLayout {
 			mSubHeaderText.setVisibility(View.VISIBLE);
 		}
 	}
+
+	public void onPullY(float scaleOfHeight) {
+				
+	}
+
+	/*private void resetImageRotation() {
+		mHeaderImageMatrix.reset();
+		mHeaderImage.setImageMatrix(mHeaderImageMatrix);
+	}*/
 }

@@ -9,7 +9,9 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.os.SystemClock;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
+
 import com.handmark.pulltorefresh.library.R;
 
 public class LoadingView extends View {
@@ -44,22 +46,23 @@ public class LoadingView extends View {
     private final int mScaledX = (int) (-42*mScale + 0.5f);
     private final int mScaledY = (int) (-37*mScale + 0.5f);
     
+    
     //movement in x,y of the beer level, for different screen densities.
-    private float mDeltaX = (2*mScale);
-    private float mDeltaY = (1*mScale);
+    private int mDeltaX = (int) ((2*mScale) + 0.5f);
+    private int mDeltaY = (int) ((1*mScale) + 0.5f);
     
     //since the pulltorefresh_library uses 4 instances of LoadingLayout, 
     //we need to sync the position of the beer level to make movements 
     //up and down appear smooth.
-    private static float mCurrentX;
-    private static float mCurrentY;
+    private static int mCurrentX;
+    private static int mCurrentY;
     
-	//Instantiate static resources used in the animation.
-    private Bitmap mBackground = BitmapFactory.decodeResource(getResources(),
+	//static resources used in the animation.
+    private Bitmap mBackground = BitmapFactory.decodeResource(getContext().getResources(),
     		R.drawable.background);
-    private Bitmap mBackgroundMask = BitmapFactory.decodeResource(getResources(), 
+    private Bitmap mBackgroundMask = BitmapFactory.decodeResource(getContext().getResources(), 
     		R.drawable.backmask);
-    private Bitmap mForeground = BitmapFactory.decodeResource(getResources(), 
+    private Bitmap mForeground = BitmapFactory.decodeResource(getContext().getResources(), 
     		R.drawable.foreground);
     //create resulting bitmap used to draw the LoadingView.
     private Bitmap mResult = Bitmap.createBitmap(mBackground.getWidth(), 
@@ -125,7 +128,10 @@ public class LoadingView extends View {
         c.drawBitmap(mBackground, x, y, mPaint);
         mPaint.setXfermode(null);
         c.drawBitmap(mForeground, 0, 0, mPaint);
+        
 	}
+	
+	int count = 0;
 	
 	@Override
     protected void onDraw(Canvas canvas) {
@@ -134,11 +140,16 @@ public class LoadingView extends View {
 		
 		//time controlled frame rate: +25ms => 40fps
         if ((mTimeFrameLastDrawnAt + 25) < mCurrentTime) {
+        	
+        	
+        	Log.d("ATGA", "CurrentX: " + mCurrentX + " CurrentY: " + mCurrentY);
+        	Log.d("ATGA", "dx: " + mDeltaX + " dy: " + mDeltaY);
         	//switch to control which animation is being played.
 			switch (mMode) {
-	        	//draws the glass full.
+        	   	//draws the glass full.
 	        	case A_DRAW_FULL:
-	        		drawFrame((int) mCurrentX, (int) mCurrentY, mResultCanvas);
+	        		drawFrame(mCurrentX, mCurrentY, mResultCanvas);
+	        		//canvas.drawBitmap(mResult, mScaledX, mScaledY, null);
 	        		canvas.drawBitmap(mResult, mScaledX, mScaledY, null);
 	        		mTimeFrameLastDrawnAt = SystemClock.uptimeMillis();
 	        		invalidate();
@@ -146,11 +157,12 @@ public class LoadingView extends View {
 	            
 	            //animates the beer level dropping.
 	        	case A_DOWN:
+	        		
 	        		if (mCurrentY <= Y_END_POS) {
 	        			mCurrentX += mDeltaX;
 		            	mCurrentY += mDeltaY;
 	        		}
-	        		drawFrame((int) mCurrentX, (int) mCurrentY, mResultCanvas);
+	        		drawFrame(mCurrentX, mCurrentY, mResultCanvas);
 	        		canvas.drawBitmap(mResult, mScaledX, mScaledY, null);
 	            	mTimeFrameLastDrawnAt = SystemClock.uptimeMillis();
 	            	invalidate();
@@ -162,7 +174,7 @@ public class LoadingView extends View {
 	        			mCurrentX -= mDeltaX;
 	        			mCurrentY -= mDeltaY;
 	        		}
-	        		drawFrame((int) mCurrentX, (int) mCurrentY, mResultCanvas);
+	        		drawFrame(mCurrentX, mCurrentY, mResultCanvas);
 	        		canvas.drawBitmap(mResult, mScaledX, mScaledY, null);
 	        		mTimeFrameLastDrawnAt = SystemClock.uptimeMillis();
 	            	invalidate();                	
@@ -176,7 +188,7 @@ public class LoadingView extends View {
 	            			mCurrentX += mDeltaX;
 	    	            	mCurrentY += mDeltaY;
 	        			}
-	        			drawFrame((int) mCurrentX, (int) mCurrentY, mResultCanvas);
+	        			drawFrame(mCurrentX, mCurrentY, mResultCanvas);
 	        			canvas.drawBitmap(mResult, mScaledX, mScaledY, null);
 	        			
 	        			if (mCurrentY <= Y_END_POS) {
@@ -196,7 +208,7 @@ public class LoadingView extends View {
 	            			mCurrentX -= mDeltaX;
 	            			mCurrentY -= mDeltaY;
 	        			}
-	        			drawFrame((int) mCurrentX, (int) mCurrentY, mResultCanvas);
+	        			drawFrame(mCurrentX, mCurrentY, mResultCanvas);
 	        			canvas.drawBitmap(mResult, mScaledX, mScaledY, null);
 	        				        			
 	    	            if (mCurrentY >= Y_START_POS) {
@@ -215,9 +227,10 @@ public class LoadingView extends View {
         }
         //else draw again without moving beer level and invalidate.
         else {
-        	drawFrame((int) mCurrentX, (int) mCurrentY, mResultCanvas);
+        	drawFrame(mCurrentX, mCurrentY, mResultCanvas);
         	canvas.drawBitmap(mResult, mScaledX, mScaledY, null);
         	invalidate();
+            
         }
     }
 	
@@ -227,5 +240,6 @@ public class LoadingView extends View {
 		int height = (int) (55*(mScale) + 0.5f);
         int width = (int) (42*(mScale) + 0.5f);
         setMeasuredDimension(width, height);
+        
     }
 }

@@ -45,13 +45,15 @@
 	    android:paddingRight="30dip" > -->
 	    
 		<com.handmark.pulltorefresh.library.PullToRefreshListView 
-	        android:id="@+id/vLst"
+	        xmlns:ptr="http://schemas.android.com/apk/res-auto"
+	        android:id="@+id/ptrLst"
+	        ptr:ptrShowIndicator="false"
 	        android:layout_height="fill_parent"
 	        android:layout_width="fill_parent" 
 	        android:background="@android:color/transparent"
 			android:cacheColorHint="@android:color/transparent"
-			android:divider="@android:color/transparent"
 			android:listSelector="@android:color/transparent"
+    		android:divider="@android:color/transparent"
     		android:dividerHeight="8dp" />
 		
 	</LinearLayout>
